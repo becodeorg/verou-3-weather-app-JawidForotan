@@ -1,0 +1,25 @@
+*{
+    padding: 0;
+    margin: 0;
+}
+body{
+    height: 100vh;
+    width: 100vw;
+    box-sizing: border-box;
+    background-color: rgb(140, 145, 145);
+}
+.search{
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    margin-top: 30px;
+}
+.icon{
+    width: 30px;
+    
+}
+.myInput{
+    height: 33px;
+    width: 150px;
+    font-size: 25px;
+}
