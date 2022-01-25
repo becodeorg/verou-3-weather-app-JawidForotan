@@ -1,3 +1,7 @@
+// Import api key
+import myValue from "./config.js";
+
+// Create html contents
 const createContainer = document.createElement("div");
 createContainer.setAttribute("class", "container");
 document.body.appendChild(createContainer);
@@ -18,9 +22,9 @@ createSearchDiv.appendChild(CreateButton);
 const createWeatherDiv = document.createElement("div");
 createWeatherDiv.setAttribute("class", "weather");
 createContainer.appendChild(createWeatherDiv);
-const createName = document.createElement("h2");
+const createName = document.createElement("h4");
 createName.setAttribute("class", "name");
-const createTemp = document.createElement("h2");
+const createTemp = document.createElement("h4");
 createTemp.setAttribute("class", "temperature");
 const createImg = document.createElement("img");
 createImg.setAttribute("class", "image");
@@ -37,11 +41,12 @@ createWeatherDiv.appendChild(createDesc);
 createWeatherDiv.appendChild(createHumid);
 createWeatherDiv.appendChild(createWind);
 
+// Fetch data from open api
 CreateButton.addEventListener("click", () => {
   fetch(
     "https://api.openweathermap.org/data/2.5/weather?q=" +
       CreateInput.value +
-      "&units=metric&appid=a7838a7fd0899014d0bd24874d68c9ec"
+      "&units=metric&appid=" + myValue
   )
     .then((Response) => Response.json())
     .then((data) => {
@@ -54,5 +59,3 @@ CreateButton.addEventListener("click", () => {
       createWind.innerText = `Wind-speed ${data.wind.speed}km/h`;
     });
 });
-
-
