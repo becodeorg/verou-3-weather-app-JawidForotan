@@ -13,12 +13,12 @@ body {
     rgb(88, 164, 250)
   );
 }
-.container {
-  display: flex;
-  flex-wrap: wrap;
-  justify-content: center;
-  align-items: center;
-  margin: 15px;
+
+.header {
+  margin-bottom: 20px;
+  font-family: "Lobster", cursive;
+  font-size: 40px;
+  color: rgb(44, 43, 43);
 }
 .search {
   display: flex;
@@ -27,12 +27,6 @@ body {
   align-items: center;
   border: none;
   margin-top: 50px;
-}
-.header {
-  margin-bottom: 20px;
-  font-family: "Lobster", cursive;
-  font-size: 40px;
-  color: rgb(44, 43, 43);
 }
 .myInput {
   height: 35px;
@@ -58,15 +52,26 @@ body {
   color: rgb(255, 255, 255);
   cursor: pointer;
 }
-
-.minMax {
+.container {
   display: flex;
-}
-.minMax p {
-  margin: 0px 10px;
+  flex-direction: column;
+  flex-wrap: wrap;
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
 }
 
-.weather {
+.imageDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+}
+.weatherCont{
+  display: flex;
+  flex-wrap: wrap;
+}
+
+.weatherDiv {
   display: flex;
   flex-direction: column;
   justify-content: center;
@@ -81,7 +86,7 @@ body {
   border-radius: 10px;
   padding: 20px 10px;
 }
-.weather:hover {
+.weatherDiv:hover {
   transform: translateY(-3px);
   cursor: pointer;
 }
@@ -97,6 +102,18 @@ body {
 .image {
   width: 120px;
 }
+.cityImage {
+  width: 400px;
+  height: 300px;
+}
+
+.minMax {
+  display: flex;
+}
+.minMax p {
+  margin: 0px 10px;
+}
+
 @media (max-width: 650px) {
   .header {
     font-size: 30px;
