@@ -1,5 +1,6 @@
 const apiKey = "a7838a7fd0899014d0bd24874d68c9ec";
 
+
 // Create input contents
 const createSearchDiv = document.createElement("div");
 createSearchDiv.setAttribute("class", "search");
@@ -22,7 +23,7 @@ const createContainer = document.createElement("div");
 createContainer.setAttribute("class", "container");
 document.body.appendChild(createContainer);
 
-const createElements = (daily, city) => {
+const createElements = (daily, city, day) => {
   const createWeatherDiv = document.createElement("div");
   createWeatherDiv.setAttribute("class", "weather");
   createContainer.appendChild(createWeatherDiv);
@@ -65,7 +66,8 @@ const createElements = (daily, city) => {
   createTemp.innerText = `${Math.round(daily.temp.day)}°C`;
   createImg.src =
     "http://openweathermap.org/img/wn/" + daily.weather[0].icon + ".png";
-  // createDate.innerText = data.dt_txt;
+
+  createDate.innerText = day;
   createMin.innerText = `Low ${Math.round(daily.temp.min)}°C`;
   createMax.innerText = `High ${Math.round(daily.temp.max)}°C`;
   createDesc.innerText = daily.weather[0].description;
@@ -96,8 +98,23 @@ const getData = () => {
       )
         .then((Response) => Response.json())
         .then((result) => {
+          console.log(result);
+          const weekday = [
+            "Sunday",
+            "Monday",
+            "Tuesday",
+            "Wednesday",
+            "Thursday",
+            "Friday",
+            "Saturday",
+          ];
+
           for (i = 0; i < 5; i++) {
-            createElements(result.daily[i], city);
+            const date = new Date();
+            let day = weekday[(date.getDay() + i) % 7];
+            let d = date.toLocaleString();
+            console.log(d);  
+            createElements(result.daily[i], city, day);
           }
         });
     });
