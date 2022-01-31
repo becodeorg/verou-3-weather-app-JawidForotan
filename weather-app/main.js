@@ -92,6 +92,16 @@ const createElements = (daily, city, day) => {
 
 // Get data from open weather api
 let cityName;
+const weekday = [
+  "Sunday",
+  "Monday",
+  "Tuesday",
+  "Wednesday",
+  "Thursday",
+  "Friday",
+  "Saturday",
+];
+
 const getData = () => {
   cityName = document.querySelector(".myInput").value;
   const url =
@@ -120,15 +130,6 @@ const getData = () => {
         .then((Response) => Response.json())
         .then((result) => {
           console.log(result);
-          const weekday = [
-            "Sunday",
-            "Monday",
-            "Tuesday",
-            "Wednesday",
-            "Thursday",
-            "Friday",
-            "Saturday",
-          ];
           for (let i = 0; i < 5; i++) {
             const date = new Date();
             let day = weekday[(date.getDay() + i) % 7];
