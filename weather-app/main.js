@@ -1,14 +1,14 @@
-const apiKey = "a7838a7fd0899014d0bd24874d68c9ec";
-const photoKey = "ITOCDNJoj5saUcLxJkUZ2wIc0UXLZMGUTXup2yf6VO8";
+import dataKey from "./config.js";
+const key = dataKey.apiKey;
 
-// Create div function
+// Function to create div
 function createDiv(className) {
   const newDiv = document.createElement("div");
   newDiv.classList = className;
   return newDiv;
 }
 
-// Create paragraph function
+// Function to create paragraph
 function createP(className, content) {
   const newP = document.createElement("p");
   newP.classList = className;
@@ -19,7 +19,6 @@ function createP(className, content) {
 // Create search container
 const createSearchDiv = createDiv("search");
 document.body.appendChild(createSearchDiv);
-
 const createHeader = document.createElement("h1");
 createHeader.setAttribute("class", "header");
 createSearchDiv.appendChild(createHeader);
@@ -28,10 +27,7 @@ const CreateInput = document.createElement("input");
 CreateInput.setAttribute("class", "myInput");
 CreateInput.type = "text";
 CreateInput.placeholder = "Enter city name";
-const CreateButton = document.createElement("button");
-CreateButton.setAttribute("class", "btn");
-CreateButton.innerHTML = "Search";
-createSearchDiv.append(CreateInput, CreateButton);
+createSearchDiv.append(CreateInput);
 
 // Create container for html elements
 const createContainer = createDiv("container");
@@ -45,24 +41,22 @@ const createElements = (daily, city, day) => {
   const createWeatherDiv = createDiv("weatherDiv");
   createWeatherCont.appendChild(createWeatherDiv);
 
-  const createName = document.createElement("h3");
-  createName.setAttribute("class", "name");
-  createName.innerText = city;
+  const createDayTemDiv = createDiv("createDayTemDiv");
+
+  const createDay = document.createElement("h4");
+  createDay.setAttribute("class", "day");
+  createDay.innerText = day;
 
   const createTemp = document.createElement("h1");
   createTemp.setAttribute("class", "temperature");
   createTemp.innerText = `${Math.round(daily.temp.day)}°C`;
 
-  const createDateDiv = createDiv("dateTime");
+  createDayTemDiv.append(createDay, createTemp);
 
-  const createDate = document.createElement("h4");
-  createDate.setAttribute("class", "date");
-  createDate.innerText = day;
-
-  const createTime = document.createElement("h4");
-  createTime.setAttribute("class", "time");
-
-  createDateDiv.append(createDate, createTime);
+  // const createDateDiv = createDiv("dateTime");
+  // const createTime = document.createElement("h4");
+  // createTime.setAttribute("class", "time");
+  // createDateDiv.append(createTime);
 
   const createImg = document.createElement("img");
   createImg.setAttribute("class", "image");
@@ -70,51 +64,49 @@ const createElements = (daily, city, day) => {
     "http://openweathermap.org/img/wn/" + daily.weather[0].icon + ".png";
 
   const createMinMaxDiv = createDiv("minMax");
-
-  const createMin = document.createElement("p");
-  createMin.innerText = `Low ${Math.round(daily.temp.min)}°C`;
-
-  const createMax = document.createElement("p");
-  createMax.innerText = `High ${Math.round(daily.temp.max)}°C`;
-
+  const minParaContent = `Low ${Math.round(daily.temp.min)}°C`;
+  const createMin = createP("minTem", minParaContent);
+  const maxParaContent = `High ${Math.round(daily.temp.max)}°C`;
+  const createMax = createP("maxTem", maxParaContent);
   createMinMaxDiv.append(createMin, createMax);
 
-  const createDesc = document.createElement("p");
-  createDesc.setAttribute("class", "description");
-  createDesc.innerText = daily.weather[0].description;
+  const descParContent = daily.weather[0].description;
+  const createDesc = createP("description", descParContent);
 
-  const createHumid = document.createElement("p");
-  createHumid.setAttribute("class", "humidity");
-  createHumid.innerText = `Humidity: ${daily.humidity}%`;
+  const createHumidPar = `Humidity: ${daily.humidity}%`;
+  const createHumid = createP("humidity", createHumidPar);
 
-  const createWind = document.createElement("p");
-  createWind.setAttribute("class", "wind");
-  createWind.innerText = `Wind-speed: ${daily.wind_speed}km/h`;
+  const createWindPar = `Wind-speed: ${daily.wind_speed}km/h`;
+  const createWind = createP("wind", createWindPar);
 
   createWeatherDiv.append(
-    createName,
-    createTemp,
-    createDateDiv,
+    // createName,
+    createDayTemDiv,
+    createDesc,
     createImg,
     createMinMaxDiv,
-    createDesc,
     createHumid,
     createWind
   );
 };
 
 // Get data from open weather api
+let cityName;
 const getData = () => {
-  const cityName = document.querySelector(".myInput").value;
+  cityName = document.querySelector(".myInput").value;
   const url =
     "https://api.openweathermap.org/data/2.5/forecast?q=" +
     cityName +
     "&units=metric&appid=" +
-    apiKey;
+    key;
+  console.log(url);
   fetch(url)
     .then((Response) => Response.json())
     .then((data) => {
+      console.log(data);
       const city = data.city.name;
+      const time = data.city.timezone;
+      console.log(time);
       const lat = data.city.coord.lat;
       const lon = data.city.coord.lon;
       fetch(
@@ -123,7 +115,7 @@ const getData = () => {
           "&lon=" +
           lon +
           "&exclude=current,minutely,hourly&units=metric&appid=" +
-          apiKey
+          key
       )
         .then((Response) => Response.json())
         .then((result) => {
@@ -137,8 +129,7 @@ const getData = () => {
             "Friday",
             "Saturday",
           ];
-
-          for (i = 0; i < 5; i++) {
+          for (let i = 0; i < 5; i++) {
             const date = new Date();
             let day = weekday[(date.getDay() + i) % 7];
             createElements(result.daily[i], city, day);
@@ -147,12 +138,13 @@ const getData = () => {
           const cards = document.querySelectorAll(".weatherDiv");
           const firstWeatherCard = cards[0];
           const firstCardDiv = createDiv("firstCardCont");
-          const head1 = document.createElement("h1");
+          const head1 = document.createElement("h3");
           head1.setAttribute("class", "head1");
-          head1.textContent = "Today";
+          head1.textContent = `Today ${city}`;
           firstWeatherCard.prepend(head1);
-          firstWeatherCard.style.background = "#ADD8E6";
+          firstWeatherCard.style.background = "none";
           firstWeatherCard.style.boxShadow = "none";
+          firstWeatherCard.style.color = "white";
           firstWeatherCard.style.width = "300px";
           firstCardDiv.appendChild(firstWeatherCard);
           createWeatherCont.prepend(firstCardDiv);
@@ -175,19 +167,24 @@ const getData = () => {
 
 // Display city image
 async function getCityImage() {
-  const city_name = document.querySelector(".myInput").value;
   const url =
     "https://api.unsplash.com/search/photos?query=" +
-    city_name +
+    cityName +
     "&client_id=" +
-    photoKey;
+    dataKey.photoKey;
+  const bodyStyle = document.body.style;
   const getImage = await fetch(url).then((response) => response.json());
-  document.body.style.backgroundImage = `url(${getImage.results[0].urls.regular})`;
-  document.body.style.backgroundRepeat = "no-repeat";
-  document.body.style.backgroundSize = "cover";
+  bodyStyle.backgroundImage = `url(${getImage.results[0].urls.regular})`;
+  bodyStyle.backgroundRepeat = "no-repeat";
+  bodyStyle.backgroundSize = "cover";
 }
 
-// Add events to the search button
-const addEventToBtn = document.querySelector(".btn");
-addEventToBtn.addEventListener("click", getData);
-addEventToBtn.addEventListener("click", getCityImage);
+// Add events to the search
+CreateInput.addEventListener("keyup", (e) => {
+  if (e.key === "Enter") {
+    createWeatherCont.innerHTML = "";
+    getData();
+    getCityImage();
+  }
+  return;
+});

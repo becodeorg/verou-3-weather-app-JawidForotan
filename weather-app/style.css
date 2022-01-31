@@ -70,6 +70,16 @@ body {
   display: flex;
   flex-direction: column;
 }
+.createDayTemDiv {
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  margin: 15px;
+}
+.createDayTemDiv h1 {
+  margin-left: 20px;
+}
+
 .firstCardCont {
   display: flex;
   justify-content: center;
